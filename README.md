@@ -14,21 +14,20 @@ Construir una aplicación capaz de consumir un dataset en formato JSON desde una
     - `Gson` (Google) para la serialización y deserialización de archivos JSON, implementando `GsonBuilder` con `setPrettyPrinting` para un formateo de salida legible.
 
 ## Estructura del Proyecto (Arquitectura Hexagonal)
-El código se organiza bajo el paquete `software.ulpgc.katas`, aplicando una separación estricta de responsabilidades:
+El código se organiza bajo el paquete `software.ulpgc.katas`, aplicando una separación estricta de responsabilidades adaptable a cualquier dominio:
 
-- **Paquete `domain.model` (El Núcleo):** Entidades aisladas de cualquier tecnología externa. Se utiliza un `record` inmutable (`VideoGame`) y enumerados (`Genre`, `Platform`) para blindar y tipar los datos.
-- **Paquete `ports` (Los Contratos):** Interfaces genéricas (`GameReader`, `GameWriter`) que definen qué operaciones de entrada y salida necesita el dominio, sin especificar cómo se hacen.
+- **Paquete `domain.model` (El Núcleo):** Entidades aisladas de cualquier tecnología externa. Se utilizan `records` inmutables (ej. `VideoGame`, `User`, `Character`) y enumerados para blindar y tipar los datos de entrada.
+- **Paquete `ports` (Los Contratos):** Interfaces genéricas (ej. `Reader`, `Writer`, `ImageDownloader`) que definen qué operaciones de entrada, salida y descarga necesita el dominio, sin especificar cómo se hacen.
 - **Paquete `adapters` (La Infraestructura):** Implementaciones concretas de los puertos.
-    - `JsonUrlGameReader`: Extrae el JSON remoto, lo mapea a un DTO intermedio (`GameDto`) y lo transforma al modelo de dominio.
-    - `JsonFileGameWriter`: Toma los datos del dominio, genera metadatos dinámicamente (`MetadataDto`, `ReportOutputDto`) y escribe el archivo `games.json` resultante en el disco.
+  - **Readers:** Consumen las APIs remotas, mapean los datos a DTOs intermedios y los transforman al modelo de dominio.
+  - **Writers:** Toman los datos del dominio, generan metadatos dinámicamente (`MetadataDto`) y escriben el reporte JSON resultante en disco.
+  - **Downloaders (Iteración 3):** Descargan archivos binarios (imágenes) dinámicamente basándose en los datos consumidos.
 - **Clase Principal (`Main`):** Punto de ensamblaje que actúa como inyector de dependencias, orquestando la instanciación de los adaptadores y la ejecución del flujo.
-
 ## Práctica Deliberada (Iteraciones)
 Para asimilar el uso de JSON y el patrón de puertos y adaptadores, la arquitectura se ha replicado desde cero en distintos dominios aislados en ramas independientes:
 - **Rama `master`:** Iteración 1 - Dataset de Videojuegos (Principal, demostrada en el vídeo).
-- **Rama `iteration-2`:** Iteración 2 - [Especificar dataset si lo hay, ej: Dataset de Películas].
-- **Rama `iteration-3`:** Iteración 3 - [Especificar dataset si lo hay, ej: Dataset de Libros].
-
+- **Rama `iteration-2`:** Iteración 2 - Dataset de Usuarios (Consumo de API REST, manejo de objetos JSON anidados con DTOs internos y generación de un Directorio Corporativo estructurado).
+- **Rama `iteration-3`:** Iteración 3 - Dataset de Rick and Morty (Integración con API pública para lectura de datos, y un adaptador extra usando `java.nio` para descargar y almacenar imágenes dinámicamente en el disco de forma local).
 ## Flujo Git y Proceso de Desarrollo
 - **Ramas base:** Uso de rama principal `master` y rama de desarrollo `develop`.
 - **Desarrollo iterativo:** El código se construyó de adentro hacia afuera mediante commits atómicos y descriptivos. Primero se implementó el Dominio y el Puerto de lectura; luego el Adaptador de lectura y su ensamblaje; y finalmente las clases de escritura junto con el formateo JSON.
@@ -36,7 +35,9 @@ Para asimilar el uso de JSON y el patrón de puertos y adaptadores, la arquitect
 
 ## Ejecución Rápida y Verificación
 1. Clonar el repositorio y abrir en IntelliJ IDEA.
-2. Esperar a que el IDE indexe y Maven descargue la dependencia de `Gson` especificada en el `pom.xml`.
-3. Navegar a la clase `Main`.
-4. Ejecutar la aplicación (Shift + F10).
-5. Verificar la creación del archivo `games.json` en el directorio raíz del proyecto, el cual contendrá los metadatos generados en la cabecera y la lista formateada de videojuegos.
+2. Hacer `git checkout` a la rama de la iteración que se desee probar (`master`, `iteration-2` o `iteration-3`).
+3. Esperar a que el IDE indexe y Maven descargue la dependencia de `Gson` especificada en el `pom.xml`.
+4. Navegar a la clase `Main` y ejecutar la aplicación (Shift + F10).
+5. Verificar la creación de los artefactos en el directorio raíz del proyecto:
+  - Un archivo JSON estructurado y formateado (`games.json`, `corporate_directory.json` o `characters_report.json` según la rama).
+  - En el caso de la `iteration-3`, se generará automáticamente una carpeta `photos/` con las imágenes descargadas.
