@@ -1,50 +1,11 @@
 {
-  "metadata": {
-    "processedCount": 7,
-    "discardedCount": 0
-  },
   "games": [
-    {
-      "title": "The Last Bastion",
-      "genre": "Roguelite",
-      "releaseYear": 2026,
-      "platform": "PC"
-    },
-    {
-      "title": "Hollow Knight",
-      "genre": "Metroidvania",
-      "releaseYear": 2017,
-      "platform": "Multiplatform"
-    },
-    {
-      "title": "Hades II",
-      "genre": "Roguelite",
-      "releaseYear": 2024,
-      "platform": "Multiplatform"
-    },
-    {
-      "title": "Ori and the Will of the Wisps",
-      "genre": "Metroidvania",
-      "releaseYear": 2020,
-      "platform": "Multiplatform"
-    },
-    {
-      "title": "Dead Cells",
-      "genre": "Roguelite",
-      "releaseYear": 2018,
-      "platform": "Multiplatform"
-    },
-    {
-      "title": "Animal Well",
-      "genre": "Metroidvania",
-      "releaseYear": 2024,
-      "platform": "Multiplatform"
-    },
-    {
-      "title": "Balatro",
-      "genre": "Roguelite",
-      "releaseYear": 2024,
-      "platform": "Multiplatform"
-    }
+    { "title": "The Last Bastion", "genre": "Roguelite", "releaseYear": 2026, "platform": "PC" },
+    { "title": "Hollow Knight", "genre": "Metroidvania", "releaseYear": 2017, "platform": "Multiplatform" },
+    { "title": "Hades II", "genre": "Roguelite", "releaseYear": 2024, "platform": "Multiplatform" },
+    { "title": "Ori and the Will of the Wisps", "genre": "Metroidvania", "releaseYear": 2020, "platform": "Multiplatform" },
+    { "title": "Dead Cells", "genre": "Roguelite", "releaseYear": 2018, "platform": "Multiplatform" },
+    { "title": "Animal Well", "genre": "Metroidvania", "releaseYear": 2024, "platform": "Multiplatform" },
+    { "title": "Balatro", "genre": "Roguelite", "releaseYear": 2024, "platform": "Multiplatform" }
   ]
 }
