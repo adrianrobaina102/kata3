@@ -1,9 +1,7 @@
 package software.ulpgc.katas.ports;
 
-import software.ulpgc.katas.domain.model.User;
-
-import java.util.List;
+import software.ulpgc.katas.domain.model.CorporateDirectoryReport;
 
 public interface UserWriter {
-    void writeUsers(List<User> users);
+    void writeReport(CorporateDirectoryReport report);
 }
