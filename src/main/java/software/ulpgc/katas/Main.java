@@ -9,11 +9,14 @@ import software.ulpgc.katas.ports.CharacterWriter;
 import software.ulpgc.katas.ports.ImageDownloader;
 
 import java.io.File;
+import java.net.URI;
+import java.time.Duration;
 import java.util.List;
 
 public class Main {
-    static void main() {
-        CharacterReader reader = new ApiCharacterReader();
+    public static void main(String[] args) {
+        URI serviceUri = URI.create("https://rickandmortyapi.com/api/character");
+        CharacterReader reader = new ApiCharacterReader(serviceUri, Duration.ofSeconds(30));
         List<Character> characters = reader.readCharacters();
         ImageDownloader downloader = new NativeImageDownloader();
         new File("photos").mkdirs();
@@ -23,6 +26,5 @@ public class Main {
         }
         CharacterWriter writer = new JsonCharacterWriter(new File("characters_report.json"));
         writer.writeCharacters(characters);
-
     }
 }

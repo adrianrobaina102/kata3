@@ -4,6 +4,7 @@ import com.google.gson.GsonBuilder;
 import software.ulpgc.katas.ports.CharacterWriter;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.List;
 import software.ulpgc.katas.domain.model.Character;
@@ -15,7 +16,7 @@ public class JsonCharacterWriter implements CharacterWriter {
     @Override
     public void writeCharacters(List<Character> characters) {
         ReportDto report = new ReportDto(characters);
-        try(Writer writer = new FileWriter(file)) {
+        try (Writer writer = new FileWriter(file, StandardCharsets.UTF_8)) {
             new GsonBuilder().setPrettyPrinting().create().toJson(report, writer);
         } catch (IOException e) {
             throw new RuntimeException(e);

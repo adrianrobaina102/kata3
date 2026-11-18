@@ -4,14 +4,15 @@
 Construir una aplicación capaz de consumir un dataset en formato JSON desde una URL externa, transformar y validar los datos hacia un modelo de dominio fuertemente tipado, y generar un nuevo reporte estructurado en formato JSON que incluya metadatos calculados. Todo el desarrollo se rige bajo los principios de la Arquitectura Hexagonal, logrando un desacoplamiento total entre la lógica de negocio y las herramientas de entrada/salida (I/O).
 
 ## Vídeo Explicativo
-- **Enlace al vídeo (YouTube):** https://youtu.be/PWiLVXCVHrQ
-- **Duración aproximada:** 4:24
+- **Enlace al vídeo principal (YouTube):** https://youtu.be/PWiLVXCVHrQ (duración aproximada: 4:24)
+- **Anexo (Actualización nueva rúbrica):** https://youtu.be/S8w94_ZZpqc
 
 ## Entorno y Requisitos
-- **JDK:** Oracle OpenJDK 27 | **Gestor:** Maven | **IDE:** IntelliJ IDEA
-- **Librerías Nativas:** Uso de `java.net.http.HttpClient` y `java.net.http.HttpRequest` para las peticiones de red.
+- **JDK:** Java 21+ (probado con Oracle JDK 23.0.1) | **Gestor:** Maven | **IDE:** IntelliJ IDEA
+- **Librerías Nativas:** Uso de `java.net.http.HttpClient` y `java.net.http.HttpRequest` con `timeout` configurable y validación de código de estado HTTP antes de deserializar.
 - **Dependencias Externas:**
-    - `Gson` (Google) para la serialización y deserialización de archivos JSON, implementando `GsonBuilder` con `setPrettyPrinting` para un formateo de salida legible.
+    - `Gson` 2.10.1 (Google) para la serialización y deserialización de archivos JSON en **UTF-8**, implementando `GsonBuilder` con `setPrettyPrinting` para un formateo de salida legible.
+    - `JUnit Jupiter` 5.10.2 (`scope: test`) para pruebas de integración con servidor HTTP local (`com.sun.net.httpserver.HttpServer`).
 
 ## Estructura del Proyecto (Arquitectura Hexagonal)
 El código se organiza bajo el paquete `software.ulpgc.katas`, aplicando una separación estricta de responsabilidades adaptable a cualquier dominio:
@@ -36,10 +37,58 @@ Para asimilar el uso de JSON y el patrón de puertos y adaptadores, la arquitect
 - **Integración:** Las funcionalidades se unificaron mediante merges limpios asegurando la estabilidad del sistema en cada paso.
 
 ## Ejecución Rápida y Verificación
+
+### Compilar y ejecutar tests (verificación automatizada)
+```bash
+mvn test
+```
+La suite (`ApiCharacterReaderAndWriterIntegrationTest`) levanta un servidor HTTP local en `127.0.0.1` y verifica:
+- Respuesta `200 OK` conocida -> escritura en **UTF-8** y comprobación de los personajes y metadatos generados.
+- Error HTTP (`404`) detectado antes de deserializar (`IllegalStateException`).
+- Respuesta JSON inválida (`JsonSyntaxException`).
+- Tiempo de espera agotado (`HttpTimeoutException`) y fallo de conexión ante puerto cerrado (`IOException`).
+
+### Compilar y ejecutar por CLI
+```bash
+mvn compile
+mvn exec:java -Dexec.mainClass="software.ulpgc.katas.Main"
+```
+
+### Contrato del servicio y ejemplo JSON (`iteration-3`)
+
+**Entrada (`GET https://rickandmortyapi.com/api/character`):**
+```json
+{
+  "results": [
+    { "id": 1, "name": "Rick Sánchez", "species": "Human", "image": "https://example.com/rick.jpg" }
+  ]
+}
+```
+
+**Salida generada (`characters_report.json`, UTF-8):**
+```json
+{
+  "metadata": {
+    "totalCharacters": 1,
+    "generatedAt": "2026-11-18",
+    "apiSource": "Rick and Morty API"
+  },
+  "characters": [
+    {
+      "id": 1,
+      "name": "Rick Sánchez",
+      "species": "Human",
+      "imageUrl": "https://example.com/rick.jpg"
+    }
+  ]
+}
+```
+
+### Ejecución desde IntelliJ IDEA
 1. Clonar el repositorio y abrir en IntelliJ IDEA.
-2. Hacer `git checkout` a la rama de la iteración que se desee probar (`master`, `iteration-2` o `iteration-3`).
-3. Esperar a que el IDE indexe y Maven descargue la dependencia de `Gson` especificada en el `pom.xml`.
-4. Navegar a la clase `Main` y ejecutar la aplicación (Shift + F10).
+2. Hacer `git checkout` a la rama de la iteración que se desee probar (`master`, `develop`, `iteration-2` o `iteration-3`).
+3. Esperar a que el IDE indexe y Maven descargue las dependencias (`Gson` y `JUnit 5`) especificadas en el `pom.xml`.
+4. Navegar a la clase `Main` y ejecutar la aplicación (Shift + F10), o ejecutar los tests en `src/test/java`.
 5. Verificar la creación de los artefactos en el directorio raíz del proyecto:
   - Un archivo JSON estructurado y formateado (`games.json`, `corporate_directory.json` o `characters_report.json` según la rama).
   - En el caso de la `iteration-3`, se generará automáticamente una carpeta `photos/` con las imágenes descargadas.
