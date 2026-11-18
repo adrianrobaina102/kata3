@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Random;
 
@@ -21,7 +22,7 @@ public class JsonFileGameWriter implements GameWriter {
     @Override
     public void write(List<VideoGame> games) throws IOException {
         ReportOutputDto reportOutputDto = new ReportOutputDto(games);
-        try(Writer writer = new FileWriter(file)) {
+        try (Writer writer = new FileWriter(file, StandardCharsets.UTF_8)) {
             new GsonBuilder().setPrettyPrinting().create().toJson(reportOutputDto, writer);
         }
     }

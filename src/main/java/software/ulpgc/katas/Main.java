@@ -8,11 +8,14 @@ import software.ulpgc.katas.ports.GameWriter;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.time.Duration;
 import java.util.List;
 
 public class Main {
-    static void main() throws IOException {
-        GameReader reader = new JsonUrlGameReader();
+    public static void main(String[] args) throws IOException {
+        URI serviceUri = URI.create("https://raw.githubusercontent.com/adrianrobaina102/kata3/refs/heads/develop/videogames.csv");
+        GameReader reader = new JsonUrlGameReader(serviceUri, Duration.ofSeconds(30));
         List<VideoGame> games = reader.read();
         GameWriter writer = new JsonFileGameWriter(new File("games.json"));
         writer.write(games);
