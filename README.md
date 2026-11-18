@@ -4,8 +4,8 @@
 Construir una aplicación capaz de consumir un dataset en formato JSON desde una URL externa, transformar y validar los datos hacia un modelo de dominio fuertemente tipado, y generar un nuevo reporte estructurado en formato JSON que incluya metadatos calculados. Todo el desarrollo se rige bajo los principios de la Arquitectura Hexagonal, logrando un desacoplamiento total entre la lógica de negocio y las herramientas de entrada/salida (I/O).
 
 ## Vídeo Explicativo
-- **Enlace al vídeo (YouTube):** https://youtu.be/PWiLVXCVHrQ
-- **Duración aproximada:** 4:24
+- **Enlace al vídeo principal (YouTube):** https://youtu.be/PWiLVXCVHrQ (duración aproximada: 4:24)
+- **Anexo (Actualización nueva rúbrica):** https://youtu.be/S8w94_ZZpqc
 
 ## Entorno y Requisitos
 - **JDK:** Java 21+ (probado con Oracle JDK 23.0.1) | **Gestor:** Maven | **IDE:** IntelliJ IDEA
